@@ -1,50 +1,20 @@
 #include <iostream>
 #include <conio.h>
 #include <windows.h>
+#include <time.h>
 
 using namespace std;
 
 #define H 20
 #define W 15
+#define B_BORDER '#' 
 
 char board[H][W] = {};
-char blocks[][4][4] = {
+char blocks[19][4][4] = {
         {{' ','I',' ',' '},
          {' ','I',' ',' '},
          {' ','I',' ',' '},
          {' ','I',' ',' '}},
-        {{' ','I',' ',' '},
-         {' ','I',' ',' '},
-         {' ','I',' ',' '},
-         {' ','I',' ',' '}},
-        {{' ',' ',' ',' '},
-         {' ','O','O',' '},
-         {' ','O','O',' '},
-         {' ',' ',' ',' '}},
-        {{' ',' ',' ',' '},
-         {' ','O','O',' '},
-         {' ','O','O',' '},
-         {' ',' ',' ',' '}},
-        {{' ',' ',' ',' '},
-         {' ','O','O',' '},
-         {' ','O','O',' '},
-         {' ',' ',' ',' '}},
-        {{' ',' ',' ',' '},
-         {' ','O','O',' '},
-         {' ','O','O',' '},
-         {' ',' ',' ',' '}},
-        {{' ',' ',' ',' '},
-         {' ','O','O',' '},
-         {' ','O','O',' '},
-         {' ',' ',' ',' '}},
-        {{' ',' ',' ',' '},
-         {' ','O','O',' '},
-         {' ','O','O',' '},
-         {' ',' ',' ',' '}},
-        {{' ',' ',' ',' '},
-         {' ','O','O',' '},
-         {' ','O','O',' '},
-         {' ',' ',' ',' '}},
         {{' ',' ',' ',' '},
          {'I','I','I','I'},
          {' ',' ',' ',' '},
@@ -57,28 +27,73 @@ char blocks[][4][4] = {
          {' ','T',' ',' '},
          {'T','T','T',' '},
          {' ',' ',' ',' '}},
+        {{' ','T',' ',' '},
+         {' ','T','T',' '},
+         {' ','T',' ',' '},
+         {' ',' ',' ',' '}},
+        {{' ',' ',' ',' '},
+         {'T','T','T',' '},
+         {' ','T',' ',' '},
+         {' ',' ',' ',' '}},
+        {{' ','T',' ',' '},
+         {'T','T',' ',' '},
+         {' ','T',' ',' '},
+         {' ',' ',' ',' '}},
         {{' ',' ',' ',' '},
          {' ','S','S',' '},
          {'S','S',' ',' '},
+         {' ',' ',' ',' '}},
+        {{'S',' ',' ',' '},
+         {'S','S',' ',' '},
+         {' ','S',' ',' '},
          {' ',' ',' ',' '}},
         {{' ',' ',' ',' '},
          {'Z','Z',' ',' '},
          {' ','Z','Z',' '},
          {' ',' ',' ',' '}},
-        {{' ',' ',' ',' '},
-         {'J',' ',' ',' '},
-         {'J','J','J',' '},
+        {{' ',' ','Z',' '},
+         {' ','Z','Z',' '},
+         {' ','Z',' ',' '},
          {' ',' ',' ',' '}},
         {{' ',' ',' ',' '},
          {' ',' ','L',' '},
          {'L','L','L',' '},
+         {' ',' ',' ',' '}},
+        {{'L',' ',' ',' '},
+         {'L',' ',' ',' '},
+         {'L','L',' ',' '},
+         {' ',' ',' ',' '}},
+        {{'L','L','L',' '},
+         {'L',' ',' ',' '},
+         {' ',' ',' ',' '},
+         {' ',' ',' ',' '}},
+        {{' ','L','L',' '},
+         {' ',' ','L',' '},
+         {' ',' ','L',' '},
+         {' ',' ',' ',' '}},
+        {{' ',' ',' ',' '},
+         {'J',' ',' ',' '},
+         {'J','J','J',' '},
+         {' ',' ',' ',' '}},
+        {{' ','J','J',' '},
+         {' ','J',' ',' '},
+         {' ','J',' ',' '},
+         {' ',' ',' ',' '}},
+        {{'J','J','J',' '},
+         {' ',' ','J',' '},
+         {' ',' ',' ',' '},
+         {' ',' ',' ',' '}},
+        {{' ','J',' ',' '},
+         {' ','J',' ',' '},
+         {'J','J',' ',' '},
          {' ',' ',' ',' '}}
 };
 
-int x = 4, y = 0, b = 1;
+int x = 5, y = 0, b = 0;
+int speed = 200; // Biến quản lý tốc độ rơi của block
 
 void gotoxy(int x, int y) {
-    COORD c = { x, y };
+    COORD c = { (short)x, (short)y };
     SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), c);
 }
 
@@ -99,15 +114,26 @@ void block2Board() {
 void initBoard() {
     for (int i = 0; i < H; i++)
         for (int j = 0; j < W; j++)
-            if ((i == H - 1) || (j == 0) || (j == W - 1)) board[i][j] = '#';
+            if ((i == H - 1) || (j == 0) || (j == W - 1)) board[i][j] = B_BORDER;
             else board[i][j] = ' ';
 }
 
 void draw() {
     gotoxy(0, 0);
-    for (int i = 0; i < H; i++, cout << endl)
-        for (int j = 0; j < W; j++)
-            cout << board[i][j];
+    for (int i = 0; i < H; i++) {
+        for (int j = 0; j < W; j++) {
+            if (board[i][j] == B_BORDER) {
+                cout << (char)178 << (char)178 << (char)178;
+            }
+            else if (board[i][j] != ' ') {
+                cout << "[" << (char)254 << "]";
+            }
+            else {
+                cout << "   ";
+            }
+        }
+        cout << endl;
+    }
 }
 
 bool canMove(int dx, int dy) {
@@ -122,27 +148,53 @@ bool canMove(int dx, int dy) {
     return true;
 }
 
-//Thêm hàm removeLine
+bool canRotate(int nextB) {
+    for (int i = 0; i < 4; i++) {
+        for (int j = 0; j < 4; j++) {
+            if (blocks[nextB][i][j] != ' ') {
+                int tx = x + j;
+                int ty = y + i;
+                if (tx < 1 || tx >= W - 1 || ty >= H - 1) return false;
+                if (board[ty][tx] != ' ') return false;
+            }
+        }
+    }
+    return true;
+}
+
+int nextRotation(int currentB) {
+    if (currentB >= 0 && currentB <= 1) return (currentB - 0 + 1) % 2 + 0;
+    if (currentB == 2) return 2;
+    if (currentB >= 3 && currentB <= 6) return (currentB - 3 + 1) % 4 + 3;
+    if (currentB >= 7 && currentB <= 8) return (currentB - 7 + 1) % 2 + 7;
+    if (currentB >= 9 && currentB <= 10) return (currentB - 9 + 1) % 2 + 9;
+    if (currentB >= 11 && currentB <= 14) return (currentB - 11 + 1) % 4 + 11;
+    if (currentB >= 15 && currentB <= 18) return (currentB - 15 + 1) % 4 + 15;
+    return currentB;
+}
+
 void removeLine() {
     int j;
     for (int i = H - 2; i > 0; i--) {
         for (j = 0; j < W - 1; j++)
-            if (board[i][j] == ' ') 
-        break;
-        if (j == W - 1){
+            if (board[i][j] == ' ') break;
+        if (j == W - 1) {
             for (int ii = i; ii > 0; ii--)
-                for (int j = 0; j < W - 1; j++)
-                     board[ii][j] = board[ii - 1][j];
+                for (int j = 0; j < W - 1; j++) board[ii][j] = board[ii - 1][j];
             i++;
             draw();
-            _sleep(200);
+            // Tăng tốc độ rơi của block mỗi khi ăn được một hàng (max là 50)
+            if (speed > 50) speed -= 10;
+            _sleep(200); // Giữ delay 200ms để tạo hiệu ứng nháy khi xóa hàng
         }
     }
 }
 
 int main() {
-    srand(time(0));
-    b = rand() % 7;
+    system("chcp 437");
+    srand((unsigned int)time(0));
+    int basicBlocks[] = { 0, 2, 3, 7, 9, 11, 15 };
+    b = basicBlocks[rand() % 7];
     system("cls");
     initBoard();
     while (1) {
@@ -151,18 +203,31 @@ int main() {
             char c = getch();
             if (c == 'a' && canMove(-1, 0)) x--;
             if (c == 'd' && canMove(1, 0)) x++;
-            if (c == 'x' && canMove(0, 1)) y++;
+            if (c == 's' && canMove(0, 1)) y++;
+            if (c == 'w') {
+                int nextB = nextRotation(b);
+                if (canRotate(nextB)) b = nextB;
+            }
             if (c == 'q') break;
         }
         if (canMove(0, 1)) y++;
         else {
             block2Board();
-            removeLine();// Kiểm tra và xóa hàng đầy (nếu có) trước khi tạo khối mới
-            x = 5; y = 0; b = rand() % 7;
+            removeLine();
+            x = 5; y = 0;
+            b = basicBlocks[rand() % 7];
+            // Xử lý GAMEOVER khi block chạm đỉnh
+            if (!canMove(0, 0)) {
+                block2Board(); // In block cuối cùng
+                draw();
+                cout << "\n   GAME OVER !!!\n" << endl;
+                break;
+            }
         }
+
         block2Board();
         draw();
-        _sleep(200);
+        _sleep(speed);
     }
     return 0;
 }
