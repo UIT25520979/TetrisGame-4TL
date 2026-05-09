@@ -122,6 +122,24 @@ bool canMove(int dx, int dy) {
     return true;
 }
 
+//Thêm hàm removeLine
+void removeLine() {
+    int j;
+    for (int i = H - 2; i > 0; i--) {
+        for (j = 0; j < W - 1; j++)
+            if (board[i][j] == ' ') 
+        break;
+        if (j == W - 1){
+            for (int ii = i; ii > 0; ii--)
+                for (int j = 0; j < W - 1; j++)
+                     board[ii][j] = board[ii - 1][j];
+            i++;
+            draw();
+            _sleep(200);
+        }
+    }
+}
+
 int main() {
     srand(time(0));
     b = rand() % 7;
@@ -139,6 +157,7 @@ int main() {
         if (canMove(0, 1)) y++;
         else {
             block2Board();
+            removeLine();// Kiểm tra và xóa hàng đầy (nếu có) trước khi tạo khối mới
             x = 5; y = 0; b = rand() % 7;
         }
         block2Board();
