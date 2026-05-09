@@ -119,6 +119,7 @@ void initBoard() {
             else board[i][j] = ' ';
 }
 
+// Thiết kế lại giao diện viền và block thành khối đặc bằng ký tự char_178 và char_254
 void draw() {
     gotoxy(0, 0);
     for (int i = 0; i < H; i++) {
@@ -213,7 +214,7 @@ int main() {
             }
             if (c == 'q') break;
         }
-        if (canMove(0, 1)) y++;
+        if (canMove(0,1)) y++;
         else {
             block2Board();
             removeLine();
@@ -221,6 +222,7 @@ int main() {
             //Chọn random 1 trong 7 block ở trạng thái gốc
             b = basicBlocks[rand() % 7];
         }
+        
         block2Board();
         draw();
         _sleep(200);
