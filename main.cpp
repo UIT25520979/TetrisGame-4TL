@@ -7,7 +7,7 @@ using namespace std;
 
 #define H 20
 #define W 15
-#define B_BORDER '#' 
+#define B_BORDER '#'
 
 char board[H][W] = {};
 char blocks[19][4][4] = {
@@ -90,7 +90,7 @@ char blocks[19][4][4] = {
 };
 
 int x = 5, y = 0, b = 0;
-int speed = 200; // Biến quản lý tốc độ rơi của block
+int speed = 200;
 
 void gotoxy(int x, int y) {
     COORD c = { (short)x, (short)y };
@@ -118,9 +118,8 @@ void initBoard() {
             else board[i][j] = ' ';
 }
 
-// Thiết kế lại giao diện viền và block thành khối đặc bằng ký tự char_178 và char_254
 void draw() {
-    gotoxy(0, 0);
+    gotoxy(0,0);
     for (int i = 0; i < H; i++) {
         for (int j = 0; j < W; j++) {
             if (board[i][j] == B_BORDER) {
@@ -184,9 +183,8 @@ void removeLine() {
                 for (int j = 0; j < W - 1; j++) board[ii][j] = board[ii - 1][j];
             i++;
             draw();
-            // Tăng tốc độ rơi của block mỗi khi ăn được một hàng (max là 50)
             if (speed > 50) speed -= 10;
-            _sleep(200); // Giữ delay 200ms để tạo hiệu ứng nháy khi xóa hàng
+            _sleep(200);
         }
     }
 }
@@ -194,41 +192,56 @@ void removeLine() {
 int main() {
     system("chcp 437");
     srand((unsigned int)time(0));
-    int basicBlocks[] = { 0, 2, 3, 7, 9, 11, 15 };
+    int basicBlocks[] = {0, 2, 3, 7, 9, 11, 15};
     b = basicBlocks[rand() % 7];
     system("cls");
     initBoard();
+    // Dùng đồng hồ hệ thống để tách biệt input và rơi tự do
+    DWORD lastDropTime = GetTickCount();
+    bool isUpdated = true; // Kiểm tra để vẽ lần đầu tiên
     while (1) {
         boardDelBlock();
-        if (kbhit()) {
+        // Quét phím
+        if (kbhit()){
             char c = getch();
-            if (c == 'a' && canMove(-1, 0)) x--;
-            if (c == 'd' && canMove(1, 0)) x++;
-            if (c == 's' && canMove(0, 1)) y++;
+            if (c == 'a' && canMove(-1,0)) { x--; isUpdated = true; }
+            if (c == 'd' && canMove(1,0)) { x++; isUpdated = true; }
+            if (c == 's' && canMove(0,1)) {
+                y++;
+                lastDropTime = GetTickCount(); // Khởi động lại mốc rơi
+                isUpdated = true;
+            }
             if (c == 'w') {
                 int nextB = nextRotation(b);
-                if (canRotate(nextB)) b = nextB;
+                if (canRotate(nextB)) { b = nextB; isUpdated = true; }
             }
             if (c == 'q') break;
         }
-        if (canMove(0,1)) y++;
-        else {
-            block2Board();
-            removeLine();
-            x = 5; y = 0;
-            b = basicBlocks[rand() % 7];
-            // Xử lý GAMEOVER khi block chạm đỉnh
-            if (!canMove(0, 0)) {
-                block2Board(); // In block cuối cùng
-                draw();
-                cout << "\n   GAME OVER !!!\n" << endl;
-                break;
+        // Logic rơi tự do theo thời gian thực
+        if (GetTickCount() - lastDropTime >= (DWORD)speed) {
+            if (canMove(0,1)) y++;
+            else {
+                block2Board();
+                removeLine();
+                x = 5; y = 0;
+                b = basicBlocks[rand() % 7];
+                if (!canMove(0, 0)) {
+                    block2Board();
+                    draw();
+                    cout << "\n   GAME OVER !!!\n" << endl;
+                    break;
+                }
             }
+            lastDropTime = GetTickCount();
+            isUpdated = true; // Báo hiệu gạch vừa rớt xuống, cần vẽ lại
         }
-
         block2Board();
-        draw();
-        _sleep(speed);
+        // Chỉ vẽ lại nếu màn hình có gì đó thay đổi
+        if (isUpdated) {
+            draw();
+            isUpdated = false;
+        }
+        _sleep(10);
     }
     return 0;
 }
