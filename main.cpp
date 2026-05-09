@@ -7,32 +7,91 @@ using namespace std;
 
 #define H 20
 #define W 15
+#define B_BORDER '#'
 
 char board[H][W] = {};
-
-char blocks[28][4][4] = {
-    {{' ','I',' ',' '},{' ','I',' ',' '},{' ','I',' ',' '},{' ','I',' ',' '}},
-    {{' ',' ',' ',' '},{'I','I','I','I'},{' ',' ',' ',' '},{' ',' ',' ',' '}},
-    {{' ','O','O',' '},{' ','O','O',' '},{' ',' ',' ',' '},{' ',' ',' ',' '}},
-    {{' ','T',' ',' '},{'T','T','T',' '},{' ',' ',' ',' '},{' ',' ',' ',' '}},
-    {{' ','T',' ',' '},{' ','T','T',' '},{' ','T',' ',' '},{' ',' ',' ',' '}},
-    {{' ',' ',' ',' '},{'T','T','T',' '},{' ','T',' ',' '},{' ',' ',' ',' '}},
-    {{' ','T',' ',' '},{'T','T',' ',' '},{' ','T',' ',' '},{' ',' ',' ',' '}},
-    {{' ','S','S',' '},{'S','S',' ',' '},{' ',' ',' ',' '},{' ',' ',' ',' '}},
-    {{'S',' ',' ',' '},{'S','S',' ',' '},{' ','S',' ',' '},{' ',' ',' ',' '}},
-    {{'Z','Z',' ',' '},{' ','Z','Z',' '},{' ',' ',' ',' '},{' ',' ',' ',' '}},
-    {{' ',' ','Z',' '},{' ','Z','Z',' '},{' ','Z',' ',' '},{' ',' ',' ',' '}},
-    {{' ',' ','L',' '},{'L','L','L',' '},{' ',' ',' ',' '},{' ',' ',' ',' '}},
-    {{'L',' ',' ',' '},{'L',' ',' ',' '},{'L','L',' ',' '},{' ',' ',' ',' '}},
-    {{'L','L','L',' '},{'L',' ',' ',' '},{' ',' ',' ',' '},{' ',' ',' ',' '}},
-    {{' ','L','L',' '},{' ',' ','L',' '},{' ',' ','L',' '},{' ',' ',' ',' '}},
-    {{'J',' ',' ',' '},{'J','J','J',' '},{' ',' ',' ',' '},{' ',' ',' ',' '}},
-    {{' ','J','J',' '},{' ','J',' ',' '},{' ','J',' ',' '},{' ',' ',' ',' '}},
-    {{'J','J','J',' '},{' ',' ','J',' '},{' ',' ',' ',' '},{' ',' ',' ',' '}},
-    {{' ','J',' ',' '},{' ','J',' ',' '},{'J','J',' ',' '},{' ',' ',' ',' '}}
+// Nâng cấp mảng lên 19 phần tử để chứa toàn bộ các trạng thái xoay của 7 loại block
+char blocks[19][4][4] = {
+        {{' ','I',' ',' '},
+         {' ','I',' ',' '},
+         {' ','I',' ',' '},
+         {' ','I',' ',' '}},
+        {{' ',' ',' ',' '},
+         {'I','I','I','I'},
+         {' ',' ',' ',' '},
+         {' ',' ',' ',' '}},
+        {{' ',' ',' ',' '},
+         {' ','O','O',' '},
+         {' ','O','O',' '},
+         {' ',' ',' ',' '}},
+        {{' ',' ',' ',' '},
+         {' ','T',' ',' '},
+         {'T','T','T',' '},
+         {' ',' ',' ',' '}},
+        {{' ','T',' ',' '},
+         {' ','T','T',' '},
+         {' ','T',' ',' '},
+         {' ',' ',' ',' '}},
+        {{' ',' ',' ',' '},
+         {'T','T','T',' '},
+         {' ','T',' ',' '},
+         {' ',' ',' ',' '}},
+        {{' ','T',' ',' '},
+         {'T','T',' ',' '},
+         {' ','T',' ',' '},
+         {' ',' ',' ',' '}},
+        {{' ',' ',' ',' '},
+         {' ','S','S',' '},
+         {'S','S',' ',' '},
+         {' ',' ',' ',' '}},
+        {{'S',' ',' ',' '},
+         {'S','S',' ',' '},
+         {' ','S',' ',' '},
+         {' ',' ',' ',' '}},
+        {{' ',' ',' ',' '},
+         {'Z','Z',' ',' '},
+         {' ','Z','Z',' '},
+         {' ',' ',' ',' '}},
+        {{' ',' ','Z',' '},
+         {' ','Z','Z',' '},
+         {' ','Z',' ',' '},
+         {' ',' ',' ',' '}},
+        {{' ',' ',' ',' '},
+         {' ',' ','L',' '},
+         {'L','L','L',' '},
+         {' ',' ',' ',' '}},
+        {{'L',' ',' ',' '},
+         {'L',' ',' ',' '},
+         {'L','L',' ',' '},
+         {' ',' ',' ',' '}},
+        {{'L','L','L',' '},
+         {'L',' ',' ',' '},
+         {' ',' ',' ',' '},
+         {' ',' ',' ',' '}},
+        {{' ','L','L',' '},
+         {' ',' ','L',' '},
+         {' ',' ','L',' '},
+         {' ',' ',' ',' '}},
+        {{' ',' ',' ',' '},
+         {'J',' ',' ',' '},
+         {'J','J','J',' '},
+         {' ',' ',' ',' '}},
+        {{' ','J','J',' '},
+         {' ','J',' ',' '},
+         {' ','J',' ',' '},
+         {' ',' ',' ',' '}},
+        {{'J','J','J',' '},
+         {' ',' ','J',' '},
+         {' ',' ',' ',' '},
+         {' ',' ',' ',' '}},
+        {{' ','J',' ',' '},
+         {' ','J',' ',' '},
+         {'J','J',' ',' '},
+         {' ',' ',' ',' '}}
 };
 
-int x = 4, y = 1, b = 0;
+// Chỉnh sửa x = 5 để block luôn rơi ở chính giữa
+int x = 5, y = 0, b = 0;
 
 void gotoxy(int x, int y) {
     COORD c = { (short)x, (short)y };
@@ -40,48 +99,63 @@ void gotoxy(int x, int y) {
 }
 
 void boardDelBlock() {
-    for (int i = 0; i < 4; i++) {
-        for (int j = 0; j < 4; j++) {
-            if (blocks[b][i][j] != ' ' && y + i < H)
+    for (int i = 0; i < 4; i++)
+        for (int j = 0; j < 4; j++)
+            if (blocks[b][i][j] != ' ' && y + j < H)
                 board[y + i][x + j] = ' ';
-        }
-    }
 }
 
 void block2Board() {
-    for (int i = 0; i < 4; i++) {
-        for (int j = 0; j < 4; j++) {
+    for (int i = 0; i < 4; i++)
+        for (int j = 0; j < 4; j++)
             if (blocks[b][i][j] != ' ')
                 board[y + i][x + j] = blocks[b][i][j];
-        }
-    }
 }
 
 void initBoard() {
-    for (int i = 0; i < H; i++) {
-        for (int j = 0; j < W; j++) {
-            if (i == H - 1 || j == 0 || j == W - 1) board[i][j] = (char)178;
+    for (int i = 0; i < H; i++)
+        for (int j = 0; j < W; j++)
+            if ((i == H - 1) || (j == 0) || (j == W - 1)) board[i][j] = B_BORDER;
             else board[i][j] = ' ';
-        }
-    }
 }
 
 void draw() {
     gotoxy(0, 0);
     for (int i = 0; i < H; i++) {
         for (int j = 0; j < W; j++) {
-            cout << board[i][j];
+            if (board[i][j] == B_BORDER) {
+                cout << (char)178 << (char)178 << (char)178;
+            }
+            else if (board[i][j] != ' ') {
+                cout << "[" << (char)254 << "]";
+            }
+            else {
+                cout << "   ";
+            }
         }
         cout << endl;
     }
 }
 
 bool canMove(int dx, int dy) {
-    for (int i = 0; i < 4; i++) {
-        for (int j = 0; j < 4; j++) {
+    for (int i = 0; i < 4; i++)
+        for (int j = 0; j < 4; j++)
             if (blocks[b][i][j] != ' ') {
                 int tx = x + j + dx;
                 int ty = y + i + dy;
+                if (tx < 1 || tx >= W - 1 || ty >= H - 1) return false;
+                if (board[ty][tx] != ' ') return false;
+            }
+    return true;
+}
+
+// Kiểm tra không gian an toàn trước khi xoay (tránh cấn viền / block)
+bool canRotate(int nextB) {
+    for (int i = 0; i < 4; i++) {
+        for (int j = 0; j < 4; j++) {
+            if (blocks[nextB][i][j] != ' ') {
+                int tx = x + j;
+                int ty = y + i;
                 if (tx < 1 || tx >= W - 1 || ty >= H - 1) return false;
                 if (board[ty][tx] != ' ') return false;
             }
@@ -90,29 +164,26 @@ bool canMove(int dx, int dy) {
     return true;
 }
 
-bool spinBlock(int newType) {
-    for (int i = 0; i < 4; i++) {
-        for (int j = 0; j < 4; j++) {
-            if (blocks[newType][i][j] != ' ') {
-                int tx = x + j;
-                int ty = y + i;
-                if (tx < 1 || tx >= W - 1 || ty >= H - 1 || board[ty][tx] != ' ') return false;
-            }
-        }
-    }
-    return true;
+// Tính toán chỉ số xoay tiếp theo dựa trên phép chia lấy dư %
+int nextRotation(int currentB) {
+    if (currentB >= 0 && currentB <= 1) return (currentB - 0 + 1) % 2 + 0;
+    if (currentB == 2) return 2;
+    if (currentB >= 3 && currentB <= 6) return (currentB - 3 + 1) % 4 + 3;
+    if (currentB >= 7 && currentB <= 8) return (currentB - 7 + 1) % 2 + 7;
+    if (currentB >= 9 && currentB <= 10) return (currentB - 9 + 1) % 2 + 9;
+    if (currentB >= 11 && currentB <= 14) return (currentB - 11 + 1) % 4 + 11;
+    if (currentB >= 15 && currentB <= 18) return (currentB - 15 + 1) % 4 + 15;
+    return currentB;
 }
 
 void removeLine() {
     int j;
     for (int i = H - 2; i > 0; i--) {
-        for (j = 1; j < W - 1; j++)
+        for (j = 0; j < W - 1; j++)
             if (board[i][j] == ' ') break;
-
         if (j == W - 1) {
             for (int ii = i; ii > 0; ii--)
-                for (int j = 1; j < W - 1; j++)
-                    board[ii][j] = board[ii - 1][j];
+                for (int j = 0; j < W - 1; j++) board[ii][j] = board[ii - 1][j];
             i++;
             draw();
             _sleep(200);
@@ -123,61 +194,36 @@ void removeLine() {
 int main() {
     system("chcp 437");
     srand((unsigned int)time(0));
-
+    // Định nghĩa mảng 7 trạng thái gốc để đảm bảo block tạo ra 
     int basicBlocks[] = { 0, 2, 3, 7, 9, 11, 15 };
     b = basicBlocks[rand() % 7];
-
     system("cls");
     initBoard();
-
-    if (!canMove(0, 0)) {
-        cout << "GAME OVER!" << endl;
-        return 0;
-    }
-
-    DWORD lastUpdateTime = GetTickCount();
-
-    while (true) {
+    while (1) {
+        boardDelBlock();
         if (kbhit()) {
-            boardDelBlock();
-            char inputKey = getch();
-            if (inputKey == 'a' && canMove(-1, 0)) x--;
-            if (inputKey == 'd' && canMove(1, 0)) x++;
-            if (inputKey == 's' && canMove(0, 1)) y++;
-            if (inputKey == 'w') {
-                int nextType = b;
-                if (b == 0 || b == 1) nextType = (b == 0) ? 1 : 0;
-                else if (b >= 3 && b <= 6) nextType = (b == 6) ? 3 : b + 1;
-                else if (b == 7 || b == 8) nextType = (b == 7) ? 8 : 7;
-                else if (b == 9 || b == 10) nextType = (b == 9) ? 10 : 9;
-                else if (b >= 11 && b <= 14) nextType = (b == 14) ? 11 : b + 1;
-                else if (b >= 15 && b <= 18) nextType = (b == 18) ? 15 : b + 1;
-                if (spinBlock(nextType)) b = nextType;
+            char c = getch();
+            if (c == 'a' && canMove(-1, 0)) x--;
+            if (c == 'd' && canMove(1, 0)) x++;
+            if (c == 's' && canMove(0, 1)) y++;
+            // Nhấn phím 'w' để gọi logic xoay block
+            if (c == 'w') {
+                int nextB = nextRotation(b);
+                if (canRotate(nextB)) b = nextB;
             }
-            if (inputKey == 'q') break;
-            block2Board();
-            draw();
+            if (c == 'q') break;
         }
-
-        if (GetTickCount() - lastUpdateTime > 200) {
-            boardDelBlock();
-            if (canMove(0, 1)) y++;
-            else {
-                block2Board();
-                removeLine();
-                x = 4; y = 1;
-                b = basicBlocks[rand() % 7];
-                if (!canMove(0, 0)) {
-                    system("cls");
-                    cout << "GAME OVER!" << endl;
-                    break;
-                }
-            }
+        if (canMove(0, 1)) y++;
+        else {
             block2Board();
-            draw();
-            lastUpdateTime = GetTickCount();
+            removeLine();
+            x = 5; y = 0;
+            //Chọn random 1 trong 7 block ở trạng thái gốc
+            b = basicBlocks[rand() % 7];
         }
-        Sleep(10);
+        block2Board();
+        draw();
+        _sleep(200);
     }
     return 0;
 }
