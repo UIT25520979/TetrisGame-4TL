@@ -7,10 +7,9 @@ using namespace std;
 
 #define H 20
 #define W 15
-#define B_BORDER '#'
+#define B_BORDER '#' 
 
 char board[H][W] = {};
-// Nâng cấp mảng lên 19 phần tử để chứa toàn bộ các trạng thái xoay của 7 loại block
 char blocks[19][4][4] = {
         {{' ','I',' ',' '},
          {' ','I',' ',' '},
@@ -90,8 +89,8 @@ char blocks[19][4][4] = {
          {' ',' ',' ',' '}}
 };
 
-// Chỉnh sửa x = 5 để block luôn rơi ở chính giữa
 int x = 5, y = 0, b = 0;
+int speed = 200; // Biến quản lý tốc độ rơi của block
 
 void gotoxy(int x, int y) {
     COORD c = { (short)x, (short)y };
@@ -150,7 +149,6 @@ bool canMove(int dx, int dy) {
     return true;
 }
 
-// Kiểm tra không gian an toàn trước khi xoay (tránh cấn viền / block)
 bool canRotate(int nextB) {
     for (int i = 0; i < 4; i++) {
         for (int j = 0; j < 4; j++) {
@@ -165,7 +163,6 @@ bool canRotate(int nextB) {
     return true;
 }
 
-// Tính toán chỉ số xoay tiếp theo dựa trên phép chia lấy dư %
 int nextRotation(int currentB) {
     if (currentB >= 0 && currentB <= 1) return (currentB - 0 + 1) % 2 + 0;
     if (currentB == 2) return 2;
@@ -187,7 +184,9 @@ void removeLine() {
                 for (int j = 0; j < W - 1; j++) board[ii][j] = board[ii - 1][j];
             i++;
             draw();
-            _sleep(200);
+            // Tăng tốc độ rơi của block mỗi khi ăn được một hàng (max là 50)
+            if (speed > 50) speed -= 10;
+            _sleep(200); // Giữ delay 200ms để tạo hiệu ứng nháy khi xóa hàng
         }
     }
 }
@@ -195,7 +194,6 @@ void removeLine() {
 int main() {
     system("chcp 437");
     srand((unsigned int)time(0));
-    // Định nghĩa mảng 7 trạng thái gốc để đảm bảo block tạo ra 
     int basicBlocks[] = { 0, 2, 3, 7, 9, 11, 15 };
     b = basicBlocks[rand() % 7];
     system("cls");
@@ -207,7 +205,6 @@ int main() {
             if (c == 'a' && canMove(-1, 0)) x--;
             if (c == 'd' && canMove(1, 0)) x++;
             if (c == 's' && canMove(0, 1)) y++;
-            // Nhấn phím 'w' để gọi logic xoay block
             if (c == 'w') {
                 int nextB = nextRotation(b);
                 if (canRotate(nextB)) b = nextB;
@@ -219,13 +216,19 @@ int main() {
             block2Board();
             removeLine();
             x = 5; y = 0;
-            //Chọn random 1 trong 7 block ở trạng thái gốc
             b = basicBlocks[rand() % 7];
+            // Xử lý GAMEOVER khi block chạm đỉnh
+            if (!canMove(0, 0)) {
+                block2Board(); // In block cuối cùng
+                draw();
+                cout << "\n   GAME OVER !!!\n" << endl;
+                break;
+            }
         }
-        
+
         block2Board();
         draw();
-        _sleep(200);
+        _sleep(speed);
     }
     return 0;
 }
