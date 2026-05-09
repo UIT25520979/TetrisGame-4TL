@@ -1,11 +1,13 @@
 #include <iostream>
 #include <conio.h>
 #include <windows.h>
+#include <time.h>
 
 using namespace std;
 
 #define H 20
 #define W 15
+#define B_BORDER '#' 
 
 char board[H][W] = {};
 char blocks[][4][4] = {
@@ -78,7 +80,7 @@ char blocks[][4][4] = {
 int x = 4, y = 0, b = 1;
 
 void gotoxy(int x, int y) {
-    COORD c = { x, y };
+    COORD c = { (short)x, (short)y };
     SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), c);
 }
 
@@ -99,15 +101,28 @@ void block2Board() {
 void initBoard() {
     for (int i = 0; i < H; i++)
         for (int j = 0; j < W; j++)
-            if ((i == H - 1) || (j == 0) || (j == W - 1)) board[i][j] = '#';
+            // Sử dụng BORDER thay vì ký tự '#'
+            if ((i == H - 1) || (j == 0) || (j == W - 1)) board[i][j] = B_BORDER;
             else board[i][j] = ' ';
 }
 
+// Thiết kế lại giao diện viền và block thành khối đặc bằng ký tự char_178 và char_254
 void draw() {
-    gotoxy(0, 0);
-    for (int i = 0; i < H; i++, cout << endl)
-        for (int j = 0; j < W; j++)
-            cout << board[i][j];
+    gotoxy(0,0);
+    for (int i = 0; i < H; i++) {
+        for (int j = 0; j < W; j++) {
+            if (board[i][j] == B_BORDER) {
+                cout << (char)178 << (char)178 << (char)178; 
+            } 
+            else if (board[i][j] != ' ') {
+                cout << "[" << (char)254 << "]"; 
+            } 
+            else {
+                cout << "   "; 
+            }
+        }
+        cout << endl;
+    }
 }
 
 bool canMove(int dx, int dy) {
@@ -122,17 +137,14 @@ bool canMove(int dx, int dy) {
     return true;
 }
 
-//Thêm hàm removeLine
 void removeLine() {
     int j;
     for (int i = H - 2; i > 0; i--) {
         for (j = 0; j < W - 1; j++)
-            if (board[i][j] == ' ') 
-        break;
+            if (board[i][j] == ' ') break;
         if (j == W - 1){
             for (int ii = i; ii > 0; ii--)
-                for (int j = 0; j < W - 1; j++)
-                     board[ii][j] = board[ii - 1][j];
+                for (int j = 0; j < W - 1; j++) board[ii][j] = board[ii - 1][j];
             i++;
             draw();
             _sleep(200);
@@ -141,25 +153,27 @@ void removeLine() {
 }
 
 int main() {
-    srand(time(0));
-    b = rand() % 7;
+    system("chcp 437"); 
+    srand((unsigned int)time(0));
+    b = rand() % 7; 
     system("cls");
     initBoard();
     while (1) {
         boardDelBlock();
         if (kbhit()) {
             char c = getch();
-            if (c == 'a' && canMove(-1, 0)) x--;
-            if (c == 'd' && canMove(1, 0)) x++;
-            if (c == 'x' && canMove(0, 1)) y++;
+            if (c == 'a' && canMove(-1,0)) x--;
+            if (c == 'd' && canMove(1,0)) x++;
+            if (c == 's' && canMove(0,1)) y++; 
             if (c == 'q') break;
         }
-        if (canMove(0, 1)) y++;
+        if (canMove(0,1)) y++;
         else {
             block2Board();
-            removeLine();// Kiểm tra và xóa hàng đầy (nếu có) trước khi tạo khối mới
+            removeLine();
             x = 5; y = 0; b = rand() % 7;
         }
+        
         block2Board();
         draw();
         _sleep(200);
