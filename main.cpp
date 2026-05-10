@@ -59,7 +59,7 @@ void initBoard() {
 }
 
 void draw() {
-    gotoxy(0,0);
+    gotoxy(0, 0);
     for (int i = 0; i < H; i++) {
         for (int j = 0; j < W; j++) {
             if (board[i][j] == B_BORDER) {
@@ -132,9 +132,9 @@ int main() {
         boardDelBlock();
         if (kbhit()) {
             char c = getch();
-            if (c == 'a' && canMove(-1,0)) { x--; isUpdated = true; }
-            if (c == 'd' && canMove(1,0)) { x++; isUpdated = true; }
-            if (c == 's' && canMove(0,1)) {
+            if (c == 'a' && canMove(-1, 0)) { x--; isUpdated = true; }
+            if (c == 'd' && canMove(1, 0)) { x++; isUpdated = true; }
+            if (c == 's' && canMove(0, 1)) {
                 y++;
                 lastDropTime = GetTickCount();
                 isUpdated = true;
@@ -146,7 +146,7 @@ int main() {
         }
 
         if (GetTickCount() - lastDropTime >= (DWORD)speed) {
-            if (canMove(0,1)) y++;
+            if (canMove(0, 1)) y++;
             else {
                 block2Board();
                 removeLine();
