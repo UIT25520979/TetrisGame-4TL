@@ -1,1 +1,10 @@
-﻿C:\Program Files\Microsoft Visual Studio\2022\Community\MSBuild\Microsoft\VC\v170\Microsoft.CppBuild.targets(463,5): error MSB8020: The build tools for v145 (Platform Toolset = 'v145') cannot be found. To build using the v145 build tools, please install v145 build tools.  Alternatively, you may upgrade to the current Visual Studio tools by selecting the Project menu or right-click the solution, and then selecting "Retarget solution".
+﻿  main.cpp
+C:\Users\jayki\source\KNNN WEEK3\TetrisGame-4TL\main.cpp(187,13): warning C4996: '_sleep': This function or variable has been superceded by newer library or operating system functionality. Consider using Sleep instead. See online help for details.
+C:\Users\jayki\source\KNNN WEEK3\TetrisGame-4TL\main.cpp(205,13): warning C4996: 'kbhit': The POSIX name for this item is deprecated. Instead, use the ISO C and C++ conformant name: _kbhit. See online help for details.
+C:\Users\jayki\source\KNNN WEEK3\TetrisGame-4TL\main.cpp(206,22): warning C4996: 'getch': The POSIX name for this item is deprecated. Instead, use the ISO C and C++ conformant name: _getch. See online help for details.
+C:\Users\jayki\source\KNNN WEEK3\TetrisGame-4TL\main.cpp(244,9): warning C4996: '_sleep': This function or variable has been superceded by newer library or operating system functionality. Consider using Sleep instead. See online help for details.
+  Piece.cpp
+  PieceO.cpp
+  PieceT.cpp
+  Generating Code...
+  TetrisGameCode-4TL.vcxproj -> C:\Users\jayki\source\KNNN WEEK3\TetrisGame-4TL\x64\Debug\TetrisGameCode-4TL.exe

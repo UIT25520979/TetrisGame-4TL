@@ -2,7 +2,7 @@
 #include <conio.h>
 #include <windows.h>
 #include <time.h>
-
+#include "Piece.h"
 using namespace std;
 
 #define H 20
