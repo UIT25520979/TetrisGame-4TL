@@ -141,8 +141,6 @@
   <ItemGroup>
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Piece.cpp" />
-    <ClCompile Include="PieceO.cpp" />
-    <ClCompile Include="PieceT.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Piece.h" />
