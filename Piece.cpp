@@ -1,6 +1,5 @@
 #include "Piece.h"
 
-// Cài đặt các hàm của lớp cha
 Piece::Piece() {
     state = 0;
     for (int i = 0; i < 4; i++)
@@ -16,32 +15,96 @@ void Piece::copyShape(const char source[4][4]) {
             shape[i][j] = source[i][j];
 }
 
-PieceI::PieceI() {
+// Khối L
+PieceL::PieceL() {
     char s[4][4] = {
-        {' ','I',' ',' '},
-        {' ','I',' ',' '},
-        {' ','I',' ',' '},
-        {' ','I',' ',' '}
+        {' ',' ',' ',' '},
+        {' ',' ','L',' '},
+        {'L','L','L',' '},
+        {' ',' ',' ',' '}
     };
     copyShape(s);
 }
 
-void PieceI::rotate() {
-    state = (state + 1) % 2;
+void PieceL::rotate() {
+    state = (state + 1) % 4;
     if (state == 0) {
         char s[4][4] = {
-            {' ','I',' ',' '},
-            {' ','I',' ',' '},
-            {' ','I',' ',' '},
-            {' ','I',' ',' '}
+            {' ',' ',' ',' '},
+            {' ',' ','L',' '},
+            {'L','L','L',' '},
+            {' ',' ',' ',' '}
+        };
+        copyShape(s);
+    } else if (state == 1) {
+        char s[4][4] = {
+            {'L',' ',' ',' '},
+            {'L',' ',' ',' '},
+            {'L','L',' ',' '},
+            {' ',' ',' ',' '}
+        };
+        copyShape(s);
+    } else if (state == 2) {
+        char s[4][4] = {
+            {'L','L','L',' '},
+            {'L',' ',' ',' '},
+            {' ',' ',' ',' '},
+            {' ',' ',' ',' '}
+        };
+        copyShape(s);
+    } else {
+        char s[4][4] = {
+            {' ','L','L',' '},
+            {' ',' ','L',' '},
+            {' ',' ','L',' '},
+            {' ',' ',' ',' '}
         };
         copyShape(s);
     }
-    else {
+}
+
+// Khối J
+PieceJ::PieceJ() {
+    char s[4][4] = {
+        {' ',' ',' ',' '},
+        {'J',' ',' ',' '},
+        {'J','J','J',' '},
+        {' ',' ',' ',' '}
+    };
+    copyShape(s);
+}
+
+void PieceJ::rotate() {
+    state = (state + 1) % 4;
+    if (state == 0) {
         char s[4][4] = {
             {' ',' ',' ',' '},
-            {'I','I','I','I'},
+            {'J',' ',' ',' '},
+            {'J','J','J',' '},
+            {' ',' ',' ',' '}
+        };
+        copyShape(s);
+    } else if (state == 1) {
+        char s[4][4] = {
+            {' ','J','J',' '},
+            {' ','J',' ',' '},
+            {' ','J',' ',' '},
+            {' ',' ',' ',' '}
+        };
+        copyShape(s);
+    } else if (state == 2) {
+        char s[4][4] = {
+            {'J','J','J',' '},
+            {' ',' ','J',' '},
             {' ',' ',' ',' '},
+            {' ',' ',' ',' '}
+        };
+        copyShape(s);
+    } else {
+        char s[4][4] = {
+            {' ','J',' ',' '},
+            {' ','J',' ',' '},
+            {'J','J',' ',' '},
             {' ',' ',' ',' '}
         };
         copyShape(s);
