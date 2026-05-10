@@ -1,4 +1,4 @@
-#include "Piece.h"
+#include "../include/Piece.h"
 
 Piece::Piece() {
     state = 0;
