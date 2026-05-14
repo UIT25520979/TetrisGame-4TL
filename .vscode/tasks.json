@@ -7,10 +7,15 @@
             "args": [
                 "-fdiagnostics-color=always",
                 "-g",
-                "${file}",
+                "${file}", 
                 "-o",
-                "${fileDirname}\\${fileBasenameNoExtension}.exe"
-            ],
+                "${fileDirname}\\${fileBasenameNoExtension}.exe",
+                "-I${workspaceFolder}/include",
+                "-L${workspaceFolder}/lib",
+                "-lraylib",
+                "-lgdi32",
+                "-lwinmm"
+],
             "options": {
                 "cwd": "${fileDirname}"
             },

@@ -1,173 +1,106 @@
-#include <iostream>
-#include <conio.h>
-#include <windows.h>
-#include <time.h>
-#include "../include/Piece.h"
+#include "../include/common.h"
+#include "../include/menu.h"
+#include "../include/audiohandler.h"
+#include "../include/gamelogic.h"
+#include "../include/effects.h"
+#include "../include/monument.h"
 
-using namespace std;
-
-#define H 20
-#define W 15
-#define B_BORDER '#'
-
-char board[H][W] = {};
-
-int x = 5, y = 0;
-int speed = 200;
-
-void gotoxy(int x, int y) {
-    COORD c = { (short)x, (short)y };
-    SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), c);
-}
-
-Piece* currentPiece = NULL;
-
-void spawnPiece() {
-    if (currentPiece != NULL) delete currentPiece;
-    int r = rand() % 7;
-    switch(r) {
-        case 0: currentPiece = new PieceI(); break;
-        case 1: currentPiece = new PieceO(); break;
-        case 2: currentPiece = new PieceT(); break;
-        case 3: currentPiece = new PieceS(); break;
-        case 4: currentPiece = new PieceZ(); break;
-        case 5: currentPiece = new PieceL(); break;
-        case 6: currentPiece = new PieceJ(); break;
-    }
-    x = 5; y = 0;
-}
-
-void boardDelBlock() {
-    for (int i = 0; i < 4; i++)
-        for (int j = 0; j < 4; j++)
-            if (currentPiece -> shape[i][j] != ' ' && y + j < H)
-                board[y + i][x + j] = ' ';
-}
-
-void block2Board() {
-    for (int i = 0; i < 4; i++)
-        for (int j = 0; j < 4; j++)
-            if (currentPiece -> shape[i][j] != ' ')
-                board[y + i][x + j] = currentPiece -> shape[i][j];
-}
-
-void initBoard() {
-    for (int i = 0; i < H; i++)
-        for (int j = 0; j < W; j++)
-            if ((i == H - 1) || (j == 0) || (j == W - 1)) board[i][j] = B_BORDER;
-            else board[i][j] = ' ';
-}
-
-void draw() {
-    gotoxy(0, 0);
-    for (int i = 0; i < H; i++) {
-        for (int j = 0; j < W; j++) {
-            if (board[i][j] == B_BORDER) {
-                cout << (char)178 << (char)178 << (char)178;
-            }
-            else if (board[i][j] != ' ') {
-                cout << "[" << (char)254 << "]";
-            }
-            else {
-                cout << "   ";
-            }
-        }
-        cout << endl;
-    }
-}
-
-bool canMove(int dx, int dy) {
-    for (int i = 0; i < 4; i++)
-        for (int j = 0; j < 4; j++)
-            if (currentPiece -> shape[i][j] != ' ') {
-                int tx = x + j + dx;
-                int ty = y + i + dy;
-                if (tx < 1 || tx >= W - 1 || ty >= H - 1) return false;
-                if (board[ty][tx] != ' ') return false;
-            }
-    return true;
-}
-
-bool rotateBlock() {
-    if (currentPiece == nullptr) return false;
-    char backupShape[4][4];
-    int backupState = currentPiece -> state;
-    for (int i = 0; i < 4; i++)
-        for (int j = 0; j < 4; j++)
-            backupShape[i][j] = currentPiece -> shape[i][j];
-    currentPiece -> rotate();
-    if (!canMove(0, 0)) {
-        currentPiece -> copyShape(backupShape);
-        currentPiece -> state = backupState;
-        return false;
-    }
-    return true;
-}
-
-void removeLine() {
-    int j;
-    for (int i = H - 2; i > 0; i--) {
-        for (j = 0; j < W - 1; j++)
-            if (board[i][j] == ' ') break;
-        if (j == W - 1) {
-            for (int ii = i; ii > 0; ii--)
-                for (int j = 0; j < W - 1; j++) board[ii][j] = board[ii - 1][j];
-            i++;
-            draw();
-            if (speed > 50) speed -= 10;
-            _sleep(200);
-        }
-    }
-}
+// =========================================================
+// BIẾN TOÀN CỤC
+// =========================================================
+GameState currentState = STATE_MENU;        
+Difficulty currentDifficulty = DIFF_MEDIUM; 
+GameTheme currentTheme = THEME_SPACE;     
+bool quitGame = false;
 
 int main() {
-    system("chcp 437");
-    srand((unsigned int)time(0));
-    system("cls");
-    initBoard();
-    spawnPiece();
-    DWORD lastDropTime = GetTickCount();
-    bool isUpdated = true;
-    while (1) {
-        boardDelBlock();
-        if (kbhit()) {
-            char c = getch();
-            if (c == 'a' && canMove(-1, 0)) { x--; isUpdated = true; }
-            if (c == 'd' && canMove(1, 0)) { x++; isUpdated = true; }
-            if (c == 's' && canMove(0, 1)) {
-                y++;
-                lastDropTime = GetTickCount();
-                isUpdated = true;
+    // =========================================================
+    // KHỞI TẠO HỆ THỐNG
+    // =========================================================
+    InitWindow(SCREEN_WIDTH, SCREEN_HEIGHT, "TETRIS SURVIVAL GAME"); // Khởi tạo cửa sổ
+    Image logoIcon = LoadImage("assets/images/logo.png"); // Load logo game
+    SetWindowIcon(logoIcon);  //Khởi tạo logo game
+    UnloadImage(logoIcon); // Giải phóng bộ nhớ sau khi hệ điều hành đã nhận icon
+    InitAudioSystem();     // Âm thanh
+    InitMenuButtons();     // Giao diện nút bấm
+    InitEffectSystem();    // Hiệu ứng hạt và rung
+    LoadGameThemes();      // Nạp ảnh nền
+    SetTargetFPS(TARGET_FPS);  // Thiết lập tốc độ khung hình
+    // =========================================================
+    // VÒNG LẶP GAME CHÍNH
+    // =========================================================
+    while (!WindowShouldClose() && !quitGame) {
+        float deltaTime = GetFrameTime();
+        // Cập nhật nhạc nền và các hạt hiệu ứng mỗi khung hình
+        UpdateGameMusic(currentState, currentTheme);
+        UpdateEffects(deltaTime);
+        // Điều phối hoạt động dựa trên trạng thái hiện tại
+        switch (currentState) {
+        case STATE_MENU:
+        case STATE_LEVEL_SELECT:
+        case STATE_THEME_SELECT:
+        case STATE_HOW_TO_PLAY:
+        case STATE_MONUMENT:
+        case STATE_GAMEOVER:
+            UpdateMenu(currentState);
+            // Chơi lại sau khi thua
+            if (currentState == STATE_PLAYING && isGameOver) {
+                InitGame();
             }
-            if (c == 'w') {
-                if (rotateBlock()) isUpdated = true;
-            }
-            if (c == 'q') break;
-        }
-
-        if (GetTickCount() - lastDropTime >= (DWORD)speed) {
-            if (canMove(0, 1)) y++;
-            else {
-                block2Board();
-                removeLine();
-                spawnPiece();
-                if (!canMove(0, 0)) {
-                    block2Board();
-                    draw();
-                    cout << "\n   GAME OVER !!!\n" << endl;
-                    break;
+            break;
+        case STATE_PLAYING:
+            UpdateGame(deltaTime, currentDifficulty);
+            // Sự kiện game over
+            if (isGameOver) {
+                currentState = STATE_GAMEOVER;
+                SetMasterVolume(1.0f);
+                TriggerScreenShake(12.0f, 0.6f); // Kích hoạt rung mạnh khi game over
+                PlayGameSound(SFX_GAMEOVER);     // Phát nhạc game over
+                // Kiểm tra và lưu kỷ lục vào bảng vàng
+                if (IsEligibleForMonument(currentScore)) {
+                    AddRecordToMonument(currentScore, currentDifficulty, currentTheme);
                 }
             }
-            lastDropTime = GetTickCount();
-            isUpdated = true;
+            break;
         }
-        block2Board();
-        if (isUpdated) {
-            draw();
-            isUpdated = false;
+        // =========================================================
+        // VẼ GIAO DIỆN
+        // =========================================================
+        // Thiết lập Camera ảo để tạo hiệu ứng rung
+        Vector2 shake = GetScreenShakeOffset();
+        Camera2D camera = { 0 };
+        camera.offset = shake;        
+        camera.target = { 0, 0 };
+        camera.rotation = 0.0f;
+        camera.zoom = 1.0f;
+        BeginDrawing();
+        ClearBackground(BLACK);
+        // Bắt đầu vẽ qua ống kính của Camera để thấy được hiệu ứng rung
+        BeginMode2D(camera);
+        switch (currentState) {
+        case STATE_MENU:         DrawMainMenu(); break;
+        case STATE_LEVEL_SELECT: DrawLevelSelectScreen(); break;
+        case STATE_THEME_SELECT: DrawThemeSelectScreen(); break;
+        case STATE_HOW_TO_PLAY:  DrawHowToPlayScreen(); break;
+        case STATE_MONUMENT:     DrawMonumentScreen(); break;
+        case STATE_PLAYING:
+            DrawGame(currentTheme); 
+            DrawEffects();          
+            break;
+        case STATE_GAMEOVER:
+            DrawGameOverScreen(currentScore);
+            break;
         }
-        _sleep(10);
+        EndMode2D(); 
+        EndDrawing();
     }
-    delete currentPiece;
+    // =========================================================
+    // GIẢI PHÓNG TÀI NGUYÊN
+    // =========================================================
+    CloseAudioSystem();    // Đóng thiết bị âm thanh
+    UnloadGameThemes();    // Giải phóng ảnh nền theme
+    UnloadMenuResources(); // Giải phóng ảnh nền menu
+    UnloadGameLogic();     // Giải phóng các khối
+    CloseWindow();         // Đóng cửa sổ game
     return 0;
 }

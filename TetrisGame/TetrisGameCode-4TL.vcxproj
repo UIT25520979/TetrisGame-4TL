@@ -19,11 +19,29 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="include\common.h" />
+    <ClCompile Include="src\gamedraw.cpp" />
+    <ClCompile Include="src\menudraw.cpp" />
+    <ClCompile Include="src\menulogic.cpp" />
+    <ClCompile Include="src\audiohandler.cpp" />
+    <ClCompile Include="src\effects.cpp" />
+    <ClCompile Include="src\gamelogic.cpp" />
     <ClCompile Include="src\main.cpp" />
-    <ClCompile Include="src\Piece.cpp" />
+    <ClCompile Include="src\monument.cpp" />
+    <ClCompile Include="src\piece.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="include\Piece.h" />
+    <ClInclude Include="include\audiohandler.h" />
+    <ClInclude Include="include\effects.h" />
+    <ClInclude Include="include\gamelogic.h" />
+    <ClInclude Include="include\gamedata.h" />
+    <ClInclude Include="include\menu.h" />
+    <ClInclude Include="include\monument.h" />
+    <ClInclude Include="include\piece.h" />
+    <ClInclude Include="include\menudata.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>18.0</VCProjectVersion>
@@ -147,5 +165,12 @@
   </ItemDefinitionGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
+    <Import Project="packages\raylib.5.5.0\build\native\raylib.targets" Condition="Exists('packages\raylib.5.5.0\build\native\raylib.targets')" />
   </ImportGroup>
+  <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
+    <PropertyGroup>
+      <ErrorText>This project references NuGet package(s) that are missing on this computer. Use NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
+    </PropertyGroup>
+    <Error Condition="!Exists('packages\raylib.5.5.0\build\native\raylib.targets')" Text="$([System.String]::Format('$(ErrorText)', 'packages\raylib.5.5.0\build\native\raylib.targets'))" />
+  </Target>
 </Project>
