@@ -19,12 +19,12 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="..\..\..\..\..\Downloads\effects.cpp" />
     <ClCompile Include="include\common.h" />
     <ClCompile Include="src\gamedraw.cpp" />
     <ClCompile Include="src\menudraw.cpp" />
     <ClCompile Include="src\menulogic.cpp" />
     <ClCompile Include="src\audiohandler.cpp" />
-    <ClCompile Include="src\effects.cpp" />
     <ClCompile Include="src\gamelogic.cpp" />
     <ClCompile Include="src\main.cpp" />
     <ClCompile Include="src\monument.cpp" />

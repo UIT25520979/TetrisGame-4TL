@@ -30,9 +30,6 @@
     <ClCompile Include="src\monument.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\effects.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="include\common.h">
       <Filter>Header Files</Filter>
     </ClCompile>
