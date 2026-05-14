@@ -20,14 +20,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="include\common.h" />
-    <ClCompile Include="src\gamedraw.cpp" />
-    <ClCompile Include="src\menudraw.cpp" />
-    <ClCompile Include="src\menulogic.cpp" />
-    <ClCompile Include="src\audiohandler.cpp" />
-    <ClCompile Include="src\effects.cpp" />
-    <ClCompile Include="src\gamelogic.cpp" />
     <ClCompile Include="src\main.cpp" />
-    <ClCompile Include="src\monument.cpp" />
     <ClCompile Include="src\piece.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -67,7 +60,6 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
-    <PlatformToolset>v145</PlatformToolset>
     <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
