@@ -4,3 +4,6 @@ Debug/
 Release/
 *.exe
 *.user
+/TetrisGame/TetrisGameCode-4TL.aps
+/TetrisGame/TetrisGameCode-4TL.rc
+/TetrisGame/TetrisGameCode-4TL.vcxproj
