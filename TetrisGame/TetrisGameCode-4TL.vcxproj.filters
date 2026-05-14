@@ -68,9 +68,6 @@
     <ClInclude Include="include\menudata.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="include\gamedata.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
