@@ -21,9 +21,6 @@
     <ClCompile Include="src\piece.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\gamelogic.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="src\audiohandler.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -53,9 +50,6 @@
     <ClInclude Include="include\menu.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="include\gamelogic.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="include\audiohandler.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -68,7 +62,7 @@
     <ClInclude Include="include\menudata.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="include\gamedata.h">
+    <ClInclude Include="..\..\gamelogic.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

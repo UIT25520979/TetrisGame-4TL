@@ -25,7 +25,6 @@
     <ClCompile Include="src\menulogic.cpp" />
     <ClCompile Include="src\audiohandler.cpp" />
     <ClCompile Include="src\effects.cpp" />
-    <ClCompile Include="src\gamelogic.cpp" />
     <ClCompile Include="src\main.cpp" />
     <ClCompile Include="src\monument.cpp" />
     <ClCompile Include="src\piece.cpp" />
@@ -34,7 +33,6 @@
     <ClInclude Include="include\audiohandler.h" />
     <ClInclude Include="include\effects.h" />
     <ClInclude Include="include\gamelogic.h" />
-    <ClInclude Include="include\gamedata.h" />
     <ClInclude Include="include\menu.h" />
     <ClInclude Include="include\monument.h" />
     <ClInclude Include="include\piece.h" />
