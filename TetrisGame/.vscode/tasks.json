@@ -7,17 +7,19 @@
             "args": [
                 "-fdiagnostics-color=always",
                 "-g",
-                "${file}", 
+                "${workspaceFolder}/src/*.cpp",
+                "${workspaceFolder}/icon.o", 
                 "-o",
-                "${fileDirname}\\${fileBasenameNoExtension}.exe",
-                "-I${workspaceFolder}/include",
-                "-L${workspaceFolder}/lib",
-                "-lraylib",
-                "-lgdi32",
-                "-lwinmm"
-],
+                "${workspaceFolder}/SurvivalTetrisGame.exe", 
+                "-I${workspaceFolder}/include", 
+                "-L${workspaceFolder}/lib",     
+                "-lraylib",                     
+                "-lopengl32",                   
+                "-lgdi32",                      
+                 "-lwinmm"                       
+            ],
             "options": {
-                "cwd": "${fileDirname}"
+                "cwd": "${workspaceFolder}"
             },
             "problemMatcher": [
                 "$gcc"
