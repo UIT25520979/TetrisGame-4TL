@@ -17,7 +17,7 @@ float menuTime = 0.0f;
 // 1. KHỞI TẠO TỌA ĐỘ VÀ DỮ LIỆU NÚT BẤM
 // ---------------------------------------------------------
 void InitMenuButtons() {
-    menuBackground = LoadTexture("assets/images/bg_tetris.jpg");
+    menuBackground = LoadTexture("assets/images/bg_tetris.png");
     int btnW = 650;
     int btnH = 110;
     int centerX = (SCREEN_WIDTH - btnW) / 2;

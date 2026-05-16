@@ -398,8 +398,8 @@ void DrawGame(GameTheme theme) {
 // ---------------------------------------------------------
 void LoadGameThemes() {
     backgroundSpace = LoadTexture("assets/images/bg_space.png");
-    backgroundJungle = LoadTexture("assets/images/bg_jungle.jpg");
-    backgroundEgypt = LoadTexture("assets/images/bg_egypt.jpg");
+    backgroundJungle = LoadTexture("assets/images/bg_jungle.png");
+    backgroundEgypt = LoadTexture("assets/images/bg_egypt.png");
 }
 
 void UnloadGameThemes() {
