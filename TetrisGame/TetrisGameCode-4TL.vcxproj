@@ -19,7 +19,6 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="include\common.h" />
     <ClCompile Include="src\gamedraw.cpp" />
     <ClCompile Include="src\menudraw.cpp" />
     <ClCompile Include="src\menulogic.cpp" />
@@ -31,6 +30,7 @@
     <ClCompile Include="src\piece.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="include\common.h" />
     <ClInclude Include="include\audiohandler.h" />
     <ClInclude Include="include\effects.h" />
     <ClInclude Include="include\gamelogic.h" />
@@ -42,6 +42,9 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="icon.rc" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>18.0</VCProjectVersion>

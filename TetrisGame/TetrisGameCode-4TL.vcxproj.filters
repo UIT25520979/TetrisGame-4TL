@@ -33,9 +33,6 @@
     <ClCompile Include="src\effects.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="include\common.h">
-      <Filter>Header Files</Filter>
-    </ClCompile>
     <ClCompile Include="src\menulogic.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -47,6 +44,9 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="include\common.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
     <ClInclude Include="include\piece.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -74,5 +74,10 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="icon.rc">
+      <Filter>Resource Files</Filter>
+    </ResourceCompile>
   </ItemGroup>
 </Project>
